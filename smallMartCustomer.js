@@ -46,8 +46,7 @@ function bamazonCustomer() {
 
     this.processRequest = function(item_id, newQuantity) {
         connection.query("UPDATE products SET ? WHERE ?", [{ stock_quantity: newQuantity }, { item_id: item_id }], function(error, result) {
-            if (error) console.log(error);
-            console.log(result);
+            base.queryViewProducts();
         });
         base.endConnection();
     }
@@ -57,6 +56,23 @@ function bamazonCustomer() {
         base.endConnection();
     }
 
+     this.queryViewProducts = function() {
+        connection.query("SELECT * FROM products", function(error, result) {
+            base.displayQueryResult(error, result);
+        });
+    };
+
+    this.displayQueryResult = function(error, result) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("\n\nItem ID# / Product / Department / Price / Stock\n-----------------------------------------------");
+            result.forEach(function(key) {
+                console.log(key.item_id + " / " + key.product_name + " / " + key.department_name + " / " + key.price + " / " + key.stock_quantity);
+            })
+            console.log("\n");
+        };
+    };
 
 
     this.endConnection = function() {
