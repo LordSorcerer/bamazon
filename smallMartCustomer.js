@@ -48,7 +48,6 @@ function bamazonCustomer() {
         connection.query("UPDATE products SET ? WHERE ?", [{ stock_quantity: newQuantity }, { item_id: item_id }], function(error, result) {
             base.queryViewProducts();
         });
-        base.endConnection();
     }
 
     this.denyRequest = function(newQuantity) {
@@ -56,10 +55,12 @@ function bamazonCustomer() {
         base.endConnection();
     }
 
-     this.queryViewProducts = function() {
+    this.queryViewProducts = function() {
         connection.query("SELECT * FROM products", function(error, result) {
             base.displayQueryResult(error, result);
+            base.endConnection();
         });
+        
     };
 
     this.displayQueryResult = function(error, result) {
